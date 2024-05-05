@@ -283,8 +283,8 @@ with(smoothed, lines(x, y, col = 4, lwd = 2))
 Looking for the number of samples that give 80% power:
 
 ```{r}
-power2n <- function(power) {
-  optimize(function(xout) abs(with(smoothed, approx(x, y, xout))$y - .8),
+power2n <- function(power, smoothed = smoothed, ...) {
+  optimize(function(xout) with(smoothed, abs(approx(x, y, xout, ...)$y - power)),
            c(0, 1000))$minimum
 }
 ```
