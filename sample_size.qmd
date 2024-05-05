@@ -203,3 +203,49 @@ model:
 mLL(logit(.3), log(- log(.1 / .3) / 10), simulations$time, simulations$igra)
 ```
 
+### Power calculation
+
+A function that computes the ability, on simulations data set, to reject H0 according to
+which the decay rate is equal to 0, with the type-I risk `alpha`:
+
+```{r}
+decay_rate_test <- function(simulations, p0, p1, t, alpha = .05) {
+  mle3 <- function(...) mle2(mLL, data = simulations, ...)
+  model0 <- mle3(start = list(logita = logit(p0)), fixed = list(logmlambda = - Inf))
+  model1 <- mle3(start = list(logita = logit(p0), logmlambda = log(log(p0 / p1) / t)))
+  anova(model0, model1)[2, 5] < alpha
+}
+```
+
+Let's try it:
+
+```{r}
+decay_rate_test(simulations, .3, .1, 10)
+```
+
+A wrapper around the combination of `simulator()` and `decay_rate_test()`, allowing to
+repeat the operation `N` times:
+
+```{r}
+decay_rate_power <- function(p0, p1, t, t_entry, t_exposure = 0, alpha = .05, N = 100) {
+  replicate(N, decay_rate_test(simulator(p0, p1, t, t_entry, t_exposure),
+                               p0, p1, t, alpha))
+}
+```
+
+Let's try it:
+
+```{r}
+out <- decay_rate_power(p0 = .3, p1 = .1, t = 10, t_entry = runif(200, max = 10),
+                        N = 1000)
+```
+
+And see whether the number of simulations (1000) looks about OK (i.e. whether the power
+has converged):
+
+```{r}
+plot(cummean(out),
+     type = "l", xlab = "number of simulations", ylab = "power", ylim = 0:1)
+```
+
+Looks about OK.
