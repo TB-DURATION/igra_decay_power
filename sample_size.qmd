@@ -26,3 +26,68 @@ knitr::opts_chunk$set(echo       = TRUE,
 All the data and source code files are [here](https://github.com/TB-DURATION/igra_decay_power).
 
 You can ask report errors or for additional analysis [here](https://github.com/TB-DURATION/igra_decay_power).
+
+## Packages
+
+Needed packages: 
+
+```{r}
+needed_packages <- c(
+  "dplyr",
+  "bbmle",
+  "purrr",
+  "magrittr",
+  "tidyr"
+)
+```
+
+Loading packages:
+
+```{r}
+library(dplyr)
+library(bbmle)
+library(purrr)
+library(magrittr)
+```
+
+## Utility functions
+
+Tuning `abline()`
+
+```{r}
+abline2 <- function(...) abline(..., col = "lightgrey")
+```
+
+The logit function:
+
+```{r}
+logit <- function(x) log(x / (1 - x))
+```
+
+The logistic function:
+
+```{r}
+logistic <- function(x) 1 / (1 + exp(- x))
+```
+
+Random draws following the Bernoulli law:
+
+```{r}
+rbern <- function(p) rbinom(length(p), 1, p)
+```
+
+A function that adds to a dataframe colones of proportion estimates together with 
+borders of a confidence interval from a column `x` of successes and a column `n` of
+trials. This is a wrapper around the `prop.test()` function.
+
+```{r}
+add_prop_est <- function(df, x, n, p = "est", l = "lwr", u = "upr", ...) {
+  df |> 
+    mutate(test   = map2({{ x }}, {{ n }}, prop.test, ...),
+           "{p}" := map_dbl(test, ~ .x[["estimate"]]),
+           conf   = map(test, ~ setNames(.x[["conf.int"]], c(l, u)))) |> 
+    tidyr::unnest_wider(conf) |> 
+    select(- test)
+}
+```
+
