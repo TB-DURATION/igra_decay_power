@@ -12,6 +12,12 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
+knitr::knit_hooks$set(
+  margin = function(before, options, envir) {
+    if (before) par(mgp = c(1.5, .5, 0)) #, bty = "n", plt = c(.105, .97, .13, .97))
+    else NULL
+  })
+
 knitr::opts_chunk$set(echo       = TRUE,
                       message    = FALSE,
                       cache      = TRUE,
@@ -20,7 +26,11 @@ knitr::opts_chunk$set(echo       = TRUE,
                       fig.height = 5,
                       fig.width  = 1.4 * 5,
                       fig.retina = 2,
-                      fig.align  = "center")
+                      fig.align  = "center",
+                      margin     = TRUE 
+)
+
+setHook("plot.new", function() par(mgp = c(1.5, .5, 0), bty = "n"), "prepend")
 ```
 
 All the data and source code files are [here](https://github.com/TB-DURATION/igra_decay_power).
@@ -76,6 +86,12 @@ Random draws following the Bernoulli law:
 rbern <- function(p) rbinom(length(p), 1, p)
 ```
 
+A tuning of the `runif()` function:
+
+```{r}
+runif2 <- function(max_t_before) runif(length(max_t_before), 0, max_t_before)
+```
+
 A function that adds to a dataframe colones of proportion estimates together with 
 borders of a confidence interval from a column `x` of successes and a column `n` of
 trials. This is a wrapper around the `prop.test()` function.
@@ -89,5 +105,72 @@ add_prop_est <- function(df, x, n, p = "est", l = "lwr", u = "upr", ...) {
     tidyr::unnest_wider(conf) |> 
     select(- test)
 }
+```
+
+## A simulator
+
+A function that simulates data according to an exponential decay:
+
+```{r}
+simulator <- function(p0, p1, t, t_entry, t_exposure = 0) {
+  tibble(time = t_entry,
+         igra = rbern(p0 * exp(log(p1 / p0) * (t_entry + t_exposure) / t)))
+}
+```
+
+Where `p0` is the assumed initial proportion of IGRA+, `p1` is the assumed proportion of
+IGRA+ `t` years later initial time, `t_entry` is a vector of sampling times (i.e. dates
+of entry in the country) and `t_exposure` is a vector of the time before entry at which 
+exposure happened. Note that:
+
+* both `t_entry` and `t_exposure` are vectors of random values
+* the number of samples corresponds to the length of `t_entry`
+* the length of `t_exposure` is either equal to 1 or the number of samples
+
+An example with 500 samples showing what the simulations look like:
+
+```{r}
+simulator(.3, .1, 10, runif(500, max = 10))
+```
+
+To explore a bit the simulations, let's create a function that ease the vizualization
+of the Bernoulli trials data:
+
+```{r}
+show_simulations <- function(simulations, xlim = c(0, 10), breaks = 0:10) {
+  simdata <- simulations |> 
+    mutate(time2 = cut(time, breaks)) |> 
+    group_by(time2) |> 
+    summarise(x = sum(igra), n = length(igra)) |> 
+    add_prop_est(x, n) |> 
+    mutate_at(c("est", "lwr", "upr"), multiply_by, 100) |> 
+    mutate(time = as.integer(time2) - .5)
+
+  plot(NA, xlim = xlim, ylim = c(0, max(simdata$upr)),
+       xlab = "time since entry (years)", ylab = "% IGRA+")
+  abline2(h = 10 * 0:10); abline2(v = 0:max(xlim))
+  
+  with(simdata, {
+    points(time, est)
+    arrows(time, lwr, time, upr, .1, 90, 3)
+  })
+}
+```
+
+And let's build the following wrapper around this function:
+
+```{r}
+explore_simulations <- function(p0 = .3, p1 = .1, t = 10, n = 1000,
+                                xlim = c(0, 10), breaks = 0:10) {
+  show_simulations(simulator(p0, p1, t, runif(n, max = t)), xlim, breaks)
+  xs <- seq(0, t, le = 500)
+  lines(xs, 100 * p0 * exp(xs * log(p1 / p0) / t))
+}
+```
+
+Let's play with it:
+
+```{r}
+explore_simulations(p0 = .3, p1 = .1, t = 10, n = 10000)
 ```
 
