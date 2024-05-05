@@ -47,7 +47,8 @@ needed_packages <- c(
   "bbmle",
   "purrr",
   "magrittr",
-  "tidyr"
+  "tidyr",
+  "parallel"
 )
 ```
 
@@ -58,6 +59,7 @@ library(dplyr)
 library(bbmle)
 library(purrr)
 library(magrittr)
+library(parallel)
 ```
 
 ## Utility functions
@@ -227,17 +229,19 @@ A wrapper around the combination of `simulator()` and `decay_rate_test()`, allow
 repeat the operation `N` times:
 
 ```{r}
-decay_rate_power <- function(p0, p1, t, t_entry, t_exposure = 0, alpha = .05, N = 100) {
-  replicate(N, decay_rate_test(simulator(p0, p1, t, t_entry, t_exposure),
+decay_rate_power <- function(p0, p1, t, t_entry,
+                             t_exposure = function() 0, alpha = .05, N = 100) {
+  replicate(N, decay_rate_test(simulator(p0, p1, t, t_entry(), t_exposure()),
                                p0, p1, t, alpha))
 }
 ```
 
-Let's try it:
+Note that this time `t_entry` and `t_exposure` have to be functions that generate
+random times at the time the simulator is executed. Let's try it:
 
 ```{r}
-out <- decay_rate_power(p0 = .3, p1 = .1, t = 10, t_entry = runif(200, max = 10),
-                        N = 1000)
+out <- decay_rate_power(p0 = .3, p1 = .1, t = 10,
+                        t_entry = function() runif(200, max = 10), N = 1000)
 ```
 
 And see whether the number of simulations (1000) looks about OK (i.e. whether the power
@@ -248,4 +252,44 @@ plot(cummean(out),
      type = "l", xlab = "number of simulations", ylab = "power", ylim = 0:1)
 ```
 
-Looks about OK.
+Looks about OK. Next step is the compute the power for various samples sizes (takes
+about 15'):
+
+```{r eval = FALSE}
+samples_sizes <- seq(10, 1000, 10)
+powers <- mclapply(samples_sizes,
+                   function(x)
+                     decay_rate_power(p0 = .3, p1 = .1, t = 10, N = 1000,
+                                      t_entry = function() runif(x, max = 10)),
+                   mc.cores = detectCores() - 1)
+```
+
+```{r include = FALSE}
+samples_sizes <- seq(10, 1000, 10)
+powers <- readRDS("/Users/choisy/Library/CloudStorage/OneDrive-OxfordUniversityClinicalResearchUnit/GitHub/tb-duration/igra_decay_power/powers.RDS")
+```
+
+Let's visualize it:
+
+```{r}
+mean_powers <- map_dbl(powers, mean)
+plot(NA, xlim = c(0, 1000), ylim = 0:1, xlab = "number of samples", ylab = "power")
+abline2(v = seq(0, 1000, 100)); abline2(h = seq(0, 1, .2))
+points(samples_sizes, mean_powers)
+smoothed <- lowess(samples_sizes, mean_powers, .1)
+with(smoothed, lines(x, y, col = 4, lwd = 2))
+```
+
+Looking for the number of samples that give 80% power:
+
+```{r}
+power2n <- function(power) {
+  optimize(function(xout) abs(with(smoothed, approx(x, y, xout))$y - .8),
+           c(0, 1000))$minimum
+}
+```
+
+```{r}
+power2n(.8)
+```
+
