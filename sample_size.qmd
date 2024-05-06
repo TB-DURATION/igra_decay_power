@@ -55,6 +55,13 @@ needed_packages <- c(
 )
 ```
 
+Installing the missing packages:
+
+```{r}
+to_install <- needed_packages[! needed_packages %in% installed.packages()[,"Package"]]
+if (length(to_install)) install.packages(to_install)
+```
+
 Loading packages:
 
 ```{r}
@@ -67,7 +74,7 @@ library(parallel)
 
 ## Utility functions
 
-Tuning `abline()`
+Tuning `abline()`:
 
 ```{r}
 abline2 <- function(...) abline(..., col = "lightgrey")
@@ -97,9 +104,9 @@ A tuning of the `runif()` function:
 runif2 <- function(max_t_before) runif(length(max_t_before), 0, max_t_before)
 ```
 
-A function that adds to a dataframe colones of proportion estimates together with 
-borders of a confidence interval from a column `x` of successes and a column `n` of
-trials. This is a wrapper around the `prop.test()` function.
+Below is a function that adds to a dataframe colones of proportion estimates together
+with  borders of a confidence interval from a column `x` of successes and a column `n`
+of trials. This is a wrapper around the `prop.test()` function.
 
 ```{r}
 add_prop_est <- function(df, x, n, p = "est", l = "lwr", u = "upr", ...) {
@@ -243,22 +250,27 @@ Note that this time `t_entry` and `t_exposure` have to be functions that generat
 random times at the time the simulator is executed. Let's try it:
 
 ```{r}
-out <- decay_rate_power(p0 = .3, p1 = .1, t = 10,
-                        t_entry = function() runif(200, max = 10), N = 1000)
+out <- map(c(function() 0,
+             function(x) runif(200, max = 30)),
+           ~ decay_rate_power(p0 = .3, p1 = .1, t = 10,
+                              t_entry = function() runif(200, max = 10),
+                              t_exposure = .x, N = 1000))
 ```
 
 And see whether the number of simulations (1000) looks about OK (i.e. whether the power
 has converged):
 
 ```{r}
-plot(cummean(out),
+plot(cummean(out[[1]]),
      type = "l", xlab = "number of simulations", ylab = "power", ylim = 0:1)
+
+lines(cummean(out[[2]]))
 ```
 
 Looks about OK. Next step is the compute the power for various samples sizes (takes
-about 15'):
+about 40' on an 11-core):
 
-```{r eval = FALSE}
+```{r eval = FALSE, include = FALSE}
 samples_sizes <- seq(10, 1000, 10)
 powers <- mclapply(samples_sizes,
                    function(x)
@@ -267,30 +279,48 @@ powers <- mclapply(samples_sizes,
                    mc.cores = detectCores() - 1)
 ```
 
+```{r eval = FALSE}
+samples_sizes <- seq(10, 1000, 10)
+
+powers <- seq(0, 30, 5) |>
+  map(~ mclapply(
+    samples_sizes,
+    function(x) decay_rate_power(p0 = .3, p1 = .1, t = 10, N = 1000,
+                                 t_entry = function() runif(x, max = 10),
+                                 t_exposure = function() runif(x, max = .x)),
+    mc.cores = detectCores() - 1))
+```
+
 ```{r include = FALSE}
 samples_sizes <- seq(10, 1000, 10)
-powers <- readRDS(paste0("/Users/", whoami::username(), "/Library/CloudStorage/OneDrive-OxfordUniversityClinicalResearchUnit/GitHub/tb-duration/igra_decay_power/powers.RDS"))
+powers <- readRDS(paste0("/Users/", whoami::username(), "/Library/CloudStorage/OneDrive-OxfordUniversityClinicalResearchUnit/GitHub/tb-duration/igra_decay_power/powers.rds"))
 ```
 
 Let's visualize it:
 
 ```{r}
-mean_powers <- map_dbl(powers, mean)
 plot(NA, xlim = c(0, 1000), ylim = 0:1, xlab = "number of samples", ylab = "power")
 abline2(v = seq(0, 1000, 100)); abline2(h = seq(0, 1, .2))
-points(samples_sizes, mean_powers)
-smoothed <- lowess(samples_sizes, mean_powers, .1)
-with(smoothed, lines(x, y, col = 4, lwd = 2))
+
+walk(powers,
+     function(x) {
+       mean_powers <- map_dbl(x, mean)
+       points(samples_sizes, mean_powers)
+       with(lowess(samples_sizes, mean_powers, .1), lines(x, y, col = 4, lwd = 2))})
 ```
 
-Looking for the number of samples that give 80% power:
+Looking for the number of samples that gives 80% power:
 
 ```{r}
-power2n <- function(power, data = smoothed, ...) {
+power2n <- function(power,
+                    data = lowess(samples_sizes, map_dbl(powers[[1]], mean), .1), ...) {
   optimize(function(xout) with(data, abs(approx(x, y, xout, ...)$y - power)),
            c(0, 1000))$minimum
 }
 ```
+
+The number of the samples needed to get a power of 80% in case there is no delay
+between exposure and country entry:
 
 ```{r}
 power2n(.8)

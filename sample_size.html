@@ -127,57 +127,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"whoami"</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Installing the missing packages:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>to_install <span class="ot">&lt;-</span> needed_packages[<span class="sc">!</span> needed_packages <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(to_install)) <span class="fu">install.packages</span>(to_install)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Loading packages:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbmle)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbmle)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="utility-functions" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="utility-functions"><span class="header-section-number">2</span> Utility functions</h2>
-<p>Tuning <code>abline()</code></p>
+<p>Tuning <code>abline()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>abline2 <span class="ot">&lt;-</span> <span class="cf">function</span>(...) <span class="fu">abline</span>(..., <span class="at">col =</span> <span class="st">"lightgrey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>abline2 <span class="ot">&lt;-</span> <span class="cf">function</span>(...) <span class="fu">abline</span>(..., <span class="at">col =</span> <span class="st">"lightgrey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The logit function:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>logit <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">log</span>(x <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>logit <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">log</span>(x <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The logistic function:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>logistic <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span> x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>logistic <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span> x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Random draws following the Bernoulli law:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rbern <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">rbinom</span>(<span class="fu">length</span>(p), <span class="dv">1</span>, p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rbern <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">rbinom</span>(<span class="fu">length</span>(p), <span class="dv">1</span>, p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A tuning of the <code>runif()</code> function:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>runif2 <span class="ot">&lt;-</span> <span class="cf">function</span>(max_t_before) <span class="fu">runif</span>(<span class="fu">length</span>(max_t_before), <span class="dv">0</span>, max_t_before)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>runif2 <span class="ot">&lt;-</span> <span class="cf">function</span>(max_t_before) <span class="fu">runif</span>(<span class="fu">length</span>(max_t_before), <span class="dv">0</span>, max_t_before)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A function that adds to a dataframe colones of proportion estimates together with borders of a confidence interval from a column <code>x</code> of successes and a column <code>n</code> of trials. This is a wrapper around the <code>prop.test()</code> function.</p>
+<p>Below is a function that adds to a dataframe colones of proportion estimates together with borders of a confidence interval from a column <code>x</code> of successes and a column <code>n</code> of trials. This is a wrapper around the <code>prop.test()</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>add_prop_est <span class="ot">&lt;-</span> <span class="cf">function</span>(df, x, n, <span class="at">p =</span> <span class="st">"est"</span>, <span class="at">l =</span> <span class="st">"lwr"</span>, <span class="at">u =</span> <span class="st">"upr"</span>, ...) {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">test   =</span> <span class="fu">map2</span>({{ x }}, {{ n }}, prop.test, ...),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">"{p}"</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">map_dbl</span>(test, <span class="sc">~</span> .x[[<span class="st">"estimate"</span>]]),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf   =</span> <span class="fu">map</span>(test, <span class="sc">~</span> <span class="fu">setNames</span>(.x[[<span class="st">"conf.int"</span>]], <span class="fu">c</span>(l, u)))) <span class="sc">|&gt;</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">unnest_wider</span>(conf) <span class="sc">|&gt;</span> </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span> test)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>add_prop_est <span class="ot">&lt;-</span> <span class="cf">function</span>(df, x, n, <span class="at">p =</span> <span class="st">"est"</span>, <span class="at">l =</span> <span class="st">"lwr"</span>, <span class="at">u =</span> <span class="st">"upr"</span>, ...) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">test   =</span> <span class="fu">map2</span>({{ x }}, {{ n }}, prop.test, ...),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">"{p}"</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">map_dbl</span>(test, <span class="sc">~</span> .x[[<span class="st">"estimate"</span>]]),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf   =</span> <span class="fu">map</span>(test, <span class="sc">~</span> <span class="fu">setNames</span>(.x[[<span class="st">"conf.int"</span>]], <span class="fu">c</span>(l, u)))) <span class="sc">|&gt;</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">unnest_wider</span>(conf) <span class="sc">|&gt;</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span> test)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="a-simulator" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="a-simulator"><span class="header-section-number">3</span> A simulator</h2>
 <p>A function that simulates data according to an exponential decay:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, t, t_entry, <span class="at">t_exposure =</span> <span class="dv">0</span>) {</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">time =</span> t_entry,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">igra =</span> <span class="fu">rbern</span>(p0 <span class="sc">*</span> <span class="fu">exp</span>(<span class="fu">log</span>(p1 <span class="sc">/</span> p0) <span class="sc">*</span> (t_entry <span class="sc">+</span> t_exposure) <span class="sc">/</span> t)))</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, t, t_entry, <span class="at">t_exposure =</span> <span class="dv">0</span>) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">time =</span> t_entry,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">igra =</span> <span class="fu">rbern</span>(p0 <span class="sc">*</span> <span class="fu">exp</span>(<span class="fu">log</span>(p1 <span class="sc">/</span> p0) <span class="sc">*</span> (t_entry <span class="sc">+</span> t_exposure) <span class="sc">/</span> t)))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Where <code>p0</code> is the assumed initial proportion of IGRA+, <code>p1</code> is the assumed proportion of IGRA+ <code>t</code> years later initial time, <code>t_entry</code> is a vector of sampling times (i.e.&nbsp;dates of entry in the country) and <code>t_exposure</code> is a vector of the time before entry at which exposure happened. Note that:</p>
 <ul>
@@ -187,61 +192,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>An example with 500 samples showing what the simulations look like:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simulator</span>(.<span class="dv">3</span>, .<span class="dv">1</span>, <span class="dv">10</span>, <span class="fu">runif</span>(<span class="dv">500</span>, <span class="at">max =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simulator</span>(.<span class="dv">3</span>, .<span class="dv">1</span>, <span class="dv">10</span>, <span class="fu">runif</span>(<span class="dv">500</span>, <span class="at">max =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 500 × 2
     time  igra
    &lt;dbl&gt; &lt;int&gt;
- 1  4.91     1
- 2  2.86     0
- 3  2.57     0
- 4  2.37     0
- 5  5.92     1
- 6  5.48     1
- 7  4.12     0
- 8  6.79     0
- 9  6.80     0
-10  6.88     0
+ 1 2.20      0
+ 2 4.39      1
+ 3 6.78      1
+ 4 0.146     0
+ 5 2.24      0
+ 6 8.66      0
+ 7 6.11      0
+ 8 1.34      1
+ 9 8.30      0
+10 9.78      0
 # ℹ 490 more rows</code></pre>
 </div>
 </div>
 <p>To explore a bit the simulations, let’s create a function that ease the vizualization of the Bernoulli trials data:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>show_simulations <span class="ot">&lt;-</span> <span class="cf">function</span>(simulations, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>) {</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  simdata <span class="ot">&lt;-</span> simulations <span class="sc">|&gt;</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">time2 =</span> <span class="fu">cut</span>(time, breaks)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(time2) <span class="sc">|&gt;</span> </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">x =</span> <span class="fu">sum</span>(igra), <span class="at">n =</span> <span class="fu">length</span>(igra)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_prop_est</span>(x, n) <span class="sc">|&gt;</span> </span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate_at</span>(<span class="fu">c</span>(<span class="st">"est"</span>, <span class="st">"lwr"</span>, <span class="st">"upr"</span>), multiply_by, <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">as.integer</span>(time2) <span class="sc">-</span> .<span class="dv">5</span>)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> xlim, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(simdata<span class="sc">$</span>upr)),</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"time since entry (years)"</span>, <span class="at">ylab =</span> <span class="st">"% IGRA+"</span>)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline2</span>(<span class="at">h =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>); <span class="fu">abline2</span>(<span class="at">v =</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(xlim))</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(simdata, {</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(time, est)</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrows</span>(time, lwr, time, upr, .<span class="dv">1</span>, <span class="dv">90</span>, <span class="dv">3</span>)</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>show_simulations <span class="ot">&lt;-</span> <span class="cf">function</span>(simulations, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  simdata <span class="ot">&lt;-</span> simulations <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">time2 =</span> <span class="fu">cut</span>(time, breaks)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(time2) <span class="sc">|&gt;</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">x =</span> <span class="fu">sum</span>(igra), <span class="at">n =</span> <span class="fu">length</span>(igra)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_prop_est</span>(x, n) <span class="sc">|&gt;</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate_at</span>(<span class="fu">c</span>(<span class="st">"est"</span>, <span class="st">"lwr"</span>, <span class="st">"upr"</span>), multiply_by, <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">as.integer</span>(time2) <span class="sc">-</span> .<span class="dv">5</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> xlim, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(simdata<span class="sc">$</span>upr)),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"time since entry (years)"</span>, <span class="at">ylab =</span> <span class="st">"% IGRA+"</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline2</span>(<span class="at">h =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>); <span class="fu">abline2</span>(<span class="at">v =</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(xlim))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(simdata, {</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(time, est)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrows</span>(time, lwr, time, upr, .<span class="dv">1</span>, <span class="dv">90</span>, <span class="dv">3</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And let’s build the following wrapper around this function:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>explore_simulations <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>, <span class="at">n =</span> <span class="dv">1000</span>,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>) {</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_simulations</span>(<span class="fu">simulator</span>(p0, p1, t, <span class="fu">runif</span>(n, <span class="at">max =</span> t)), xlim, breaks)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  xs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, t, <span class="at">le =</span> <span class="dv">500</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(xs, <span class="dv">100</span> <span class="sc">*</span> p0 <span class="sc">*</span> <span class="fu">exp</span>(xs <span class="sc">*</span> <span class="fu">log</span>(p1 <span class="sc">/</span> p0) <span class="sc">/</span> t))</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>explore_simulations <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>, <span class="at">n =</span> <span class="dv">1000</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_simulations</span>(<span class="fu">simulator</span>(p0, p1, t, <span class="fu">runif</span>(n, <span class="at">max =</span> t)), xlim, breaks)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  xs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, t, <span class="at">le =</span> <span class="dv">500</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(xs, <span class="dv">100</span> <span class="sc">*</span> p0 <span class="sc">*</span> <span class="fu">exp</span>(xs <span class="sc">*</span> <span class="fu">log</span>(p1 <span class="sc">/</span> p0) <span class="sc">/</span> t))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s play with it:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">explore_simulations</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>, <span class="at">n =</span> <span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">explore_simulations</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>, <span class="at">n =</span> <span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="sample_size_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="sample_size_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -253,21 +258,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="4.1" class="anchored" data-anchor-id="ml-estimation"><span class="header-section-number">4.1</span> ML estimation</h3>
 <p>Let’s write down the minus log-likelihood of the exponential decay model:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mLL <span class="ot">&lt;-</span> <span class="cf">function</span>(logita, logmlambda, time, igra) {</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">logistic</span>(logita) <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span> <span class="fu">exp</span>(logmlambda) <span class="sc">*</span> time)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  igra <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(igra)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">log</span>(<span class="fu">c</span>(p[igra], (<span class="dv">1</span> <span class="sc">-</span> p)[<span class="sc">!</span> igra])))</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mLL <span class="ot">&lt;-</span> <span class="cf">function</span>(logita, logmlambda, time, igra) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">logistic</span>(logita) <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span> <span class="fu">exp</span>(logmlambda) <span class="sc">*</span> time)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  igra <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(igra)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">log</span>(<span class="fu">c</span>(p[igra], (<span class="dv">1</span> <span class="sc">-</span> p)[<span class="sc">!</span> igra])))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Where <code>logitsa</code> is the logit value of the initial proportion of IGRA+, <code>logmlambda</code> is the log of minus the rate of decay and <code>time</code> and <code>igra</code> are the columns of the simulation dataframe. Let’s generate some simulations:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">simulator</span>(.<span class="dv">3</span>, .<span class="dv">1</span>, <span class="dv">10</span>, <span class="fu">runif</span>(<span class="dv">500</span>, <span class="at">max =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">simulator</span>(.<span class="dv">3</span>, .<span class="dv">1</span>, <span class="dv">10</span>, <span class="fu">runif</span>(<span class="dv">500</span>, <span class="at">max =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And let’s use these simulated data to compute the likelihood of the exponential decay model:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mLL</span>(<span class="fu">logit</span>(.<span class="dv">3</span>), <span class="fu">log</span>(<span class="sc">-</span> <span class="fu">log</span>(.<span class="dv">1</span> <span class="sc">/</span> .<span class="dv">3</span>) <span class="sc">/</span> <span class="dv">10</span>), simulations<span class="sc">$</span>time, simulations<span class="sc">$</span>igra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mLL</span>(<span class="fu">logit</span>(.<span class="dv">3</span>), <span class="fu">log</span>(<span class="sc">-</span> <span class="fu">log</span>(.<span class="dv">1</span> <span class="sc">/</span> .<span class="dv">3</span>) <span class="sc">/</span> <span class="dv">10</span>), simulations<span class="sc">$</span>time, simulations<span class="sc">$</span>igra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 220.5703</code></pre>
+<pre><code>[1] 225.9151</code></pre>
 </div>
 </div>
 </section>
@@ -275,79 +280,91 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="4.2" class="anchored" data-anchor-id="power-calculation"><span class="header-section-number">4.2</span> Power calculation</h3>
 <p>A function that computes the ability, on simulations data set, to reject H0 according to which the decay rate is equal to 0, with the type-I risk <code>alpha</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>decay_rate_test <span class="ot">&lt;-</span> <span class="cf">function</span>(simulations, p0, p1, t, <span class="at">alpha =</span> .<span class="dv">05</span>) {</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  mle3 <span class="ot">&lt;-</span> <span class="cf">function</span>(...) <span class="fu">mle2</span>(mLL, <span class="at">data =</span> simulations, ...)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  model0 <span class="ot">&lt;-</span> <span class="fu">mle3</span>(<span class="at">start =</span> <span class="fu">list</span>(<span class="at">logita =</span> <span class="fu">logit</span>(p0)), <span class="at">fixed =</span> <span class="fu">list</span>(<span class="at">logmlambda =</span> <span class="sc">-</span> <span class="cn">Inf</span>))</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  model1 <span class="ot">&lt;-</span> <span class="fu">mle3</span>(<span class="at">start =</span> <span class="fu">list</span>(<span class="at">logita =</span> <span class="fu">logit</span>(p0), <span class="at">logmlambda =</span> <span class="fu">log</span>(<span class="fu">log</span>(p0 <span class="sc">/</span> p1) <span class="sc">/</span> t)))</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anova</span>(model0, model1)[<span class="dv">2</span>, <span class="dv">5</span>] <span class="sc">&lt;</span> alpha</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>decay_rate_test <span class="ot">&lt;-</span> <span class="cf">function</span>(simulations, p0, p1, t, <span class="at">alpha =</span> .<span class="dv">05</span>) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  mle3 <span class="ot">&lt;-</span> <span class="cf">function</span>(...) <span class="fu">mle2</span>(mLL, <span class="at">data =</span> simulations, ...)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  model0 <span class="ot">&lt;-</span> <span class="fu">mle3</span>(<span class="at">start =</span> <span class="fu">list</span>(<span class="at">logita =</span> <span class="fu">logit</span>(p0)), <span class="at">fixed =</span> <span class="fu">list</span>(<span class="at">logmlambda =</span> <span class="sc">-</span> <span class="cn">Inf</span>))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  model1 <span class="ot">&lt;-</span> <span class="fu">mle3</span>(<span class="at">start =</span> <span class="fu">list</span>(<span class="at">logita =</span> <span class="fu">logit</span>(p0), <span class="at">logmlambda =</span> <span class="fu">log</span>(<span class="fu">log</span>(p0 <span class="sc">/</span> p1) <span class="sc">/</span> t)))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anova</span>(model0, model1)[<span class="dv">2</span>, <span class="dv">5</span>] <span class="sc">&lt;</span> alpha</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s try it:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">decay_rate_test</span>(simulations, .<span class="dv">3</span>, .<span class="dv">1</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">decay_rate_test</span>(simulations, .<span class="dv">3</span>, .<span class="dv">1</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
 <p>A wrapper around the combination of <code>simulator()</code> and <code>decay_rate_test()</code>, allowing to repeat the operation <code>N</code> times:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>decay_rate_power <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, t, t_entry,</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">t_exposure =</span> <span class="cf">function</span>() <span class="dv">0</span>, <span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">N =</span> <span class="dv">100</span>) {</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replicate</span>(N, <span class="fu">decay_rate_test</span>(<span class="fu">simulator</span>(p0, p1, t, <span class="fu">t_entry</span>(), <span class="fu">t_exposure</span>()),</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                               p0, p1, t, alpha))</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>decay_rate_power <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, t, t_entry,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">t_exposure =</span> <span class="cf">function</span>() <span class="dv">0</span>, <span class="at">alpha =</span> .<span class="dv">05</span>, <span class="at">N =</span> <span class="dv">100</span>) {</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replicate</span>(N, <span class="fu">decay_rate_test</span>(<span class="fu">simulator</span>(p0, p1, t, <span class="fu">t_entry</span>(), <span class="fu">t_exposure</span>()),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                               p0, p1, t, alpha))</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that this time <code>t_entry</code> and <code>t_exposure</code> have to be functions that generate random times at the time the simulator is executed. Let’s try it:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">decay_rate_power</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>,</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">t_entry =</span> <span class="cf">function</span>() <span class="fu">runif</span>(<span class="dv">200</span>, <span class="at">max =</span> <span class="dv">10</span>), <span class="at">N =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">c</span>(<span class="cf">function</span>() <span class="dv">0</span>,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>             <span class="cf">function</span>(x) <span class="fu">runif</span>(<span class="dv">200</span>, <span class="at">max =</span> <span class="dv">30</span>)),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>           <span class="sc">~</span> <span class="fu">decay_rate_power</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                              <span class="at">t_entry =</span> <span class="cf">function</span>() <span class="fu">runif</span>(<span class="dv">200</span>, <span class="at">max =</span> <span class="dv">10</span>),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                              <span class="at">t_exposure =</span> .x, <span class="at">N =</span> <span class="dv">1000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And see whether the number of simulations (1000) looks about OK (i.e.&nbsp;whether the power has converged):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cummean</span>(out),</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">xlab =</span> <span class="st">"number of simulations"</span>, <span class="at">ylab =</span> <span class="st">"power"</span>, <span class="at">ylim =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cummean</span>(out[[<span class="dv">1</span>]]),</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">xlab =</span> <span class="st">"number of simulations"</span>, <span class="at">ylab =</span> <span class="st">"power"</span>, <span class="at">ylim =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">cummean</span>(out[[<span class="dv">2</span>]]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="sample_size_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="sample_size_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Looks about OK. Next step is the compute the power for various samples sizes (takes about 15’):</p>
+<p>Looks about OK. Next step is the compute the power for various samples sizes (takes about 40’ on an 11-core):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>samples_sizes <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">1000</span>, <span class="dv">10</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>powers <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(samples_sizes,</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">decay_rate_power</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">1000</span>,</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">t_entry =</span> <span class="cf">function</span>() <span class="fu">runif</span>(x, <span class="at">max =</span> <span class="dv">10</span>)),</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mc.cores =</span> <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>samples_sizes <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">1000</span>, <span class="dv">10</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>powers <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">mclapply</span>(</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    samples_sizes,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(x) <span class="fu">decay_rate_power</span>(<span class="at">p0 =</span> .<span class="dv">3</span>, <span class="at">p1 =</span> .<span class="dv">1</span>, <span class="at">t =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">1000</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">t_entry =</span> <span class="cf">function</span>() <span class="fu">runif</span>(x, <span class="at">max =</span> <span class="dv">10</span>),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">t_exposure =</span> <span class="cf">function</span>() <span class="fu">runif</span>(x, <span class="at">max =</span> .x)),</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">mc.cores =</span> <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s visualize it:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mean_powers <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(powers, mean)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"number of samples"</span>, <span class="at">ylab =</span> <span class="st">"power"</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline2</span>(<span class="at">v =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">100</span>)); <span class="fu">abline2</span>(<span class="at">h =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">2</span>))</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(samples_sizes, mean_powers)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>smoothed <span class="ot">&lt;-</span> <span class="fu">lowess</span>(samples_sizes, mean_powers, .<span class="dv">1</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(smoothed, <span class="fu">lines</span>(x, y, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">xlab =</span> <span class="st">"number of samples"</span>, <span class="at">ylab =</span> <span class="st">"power"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline2</span>(<span class="at">v =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">100</span>)); <span class="fu">abline2</span>(<span class="at">h =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">2</span>))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(powers,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>     <span class="cf">function</span>(x) {</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>       mean_powers <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(x, mean)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">points</span>(samples_sizes, mean_powers)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">with</span>(<span class="fu">lowess</span>(samples_sizes, mean_powers, .<span class="dv">1</span>), <span class="fu">lines</span>(x, y, <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">2</span>))})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="sample_size_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="sample_size_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Looking for the number of samples that give 80% power:</p>
+<p>Looking for the number of samples that gives 80% power:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>power2n <span class="ot">&lt;-</span> <span class="cf">function</span>(power, <span class="at">data =</span> smoothed, ...) {</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">optimize</span>(<span class="cf">function</span>(xout) <span class="fu">with</span>(data, <span class="fu">abs</span>(<span class="fu">approx</span>(x, y, xout, ...)<span class="sc">$</span>y <span class="sc">-</span> power)),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>))<span class="sc">$</span>minimum</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>power2n <span class="ot">&lt;-</span> <span class="cf">function</span>(power,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> <span class="fu">lowess</span>(samples_sizes, <span class="fu">map_dbl</span>(powers[[<span class="dv">1</span>]], mean), .<span class="dv">1</span>), ...) {</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">optimize</span>(<span class="cf">function</span>(xout) <span class="fu">with</span>(data, <span class="fu">abs</span>(<span class="fu">approx</span>(x, y, xout, ...)<span class="sc">$</span>y <span class="sc">-</span> power)),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>))<span class="sc">$</span>minimum</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The number of the samples needed to get a power of 80% in case there is no delay between exposure and country entry:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">power2n</span>(.<span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">power2n</span>(.<span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 365.654</code></pre>
 </div>
