@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 sample_size_cache/
+.DS_Store
