@@ -33,9 +33,11 @@ knitr::opts_chunk$set(echo       = TRUE,
 setHook("plot.new", function() par(mgp = c(1.5, .5, 0), bty = "n"), "prepend")
 ```
 
-All the data and source code files are [here](https://github.com/TB-DURATION/igra_decay_power).
+All the data and source code files are
+[here](https://github.com/TB-DURATION/igra_decay_power).
 
-You can ask report errors or for additional analysis [here](https://github.com/TB-DURATION/igra_decay_power).
+You can ask report errors or for additional analysis
+[here](https://github.com/TB-DURATION/igra_decay_power).
 
 ## Packages
 
@@ -48,7 +50,8 @@ needed_packages <- c(
   "purrr",
   "magrittr",
   "tidyr",
-  "parallel"
+  "parallel",
+  "whoami"
 )
 ```
 
@@ -266,7 +269,7 @@ powers <- mclapply(samples_sizes,
 
 ```{r include = FALSE}
 samples_sizes <- seq(10, 1000, 10)
-powers <- readRDS("/Users/choisy/Library/CloudStorage/OneDrive-OxfordUniversityClinicalResearchUnit/GitHub/tb-duration/igra_decay_power/powers.RDS")
+powers <- readRDS(paste0("/Users/", whoami::username(), "/Library/CloudStorage/OneDrive-OxfordUniversityClinicalResearchUnit/GitHub/tb-duration/igra_decay_power/powers.RDS"))
 ```
 
 Let's visualize it:
@@ -283,8 +286,8 @@ with(smoothed, lines(x, y, col = 4, lwd = 2))
 Looking for the number of samples that give 80% power:
 
 ```{r}
-power2n <- function(power, smoothed = smoothed, ...) {
-  optimize(function(xout) with(smoothed, abs(approx(x, y, xout, ...)$y - power)),
+power2n <- function(power, data = smoothed, ...) {
+  optimize(function(xout) with(data, abs(approx(x, y, xout, ...)$y - power)),
            c(0, 1000))$minimum
 }
 ```
